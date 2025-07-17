@@ -1,0 +1,11 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/nordcominc/devcontainer-features/android-sdk:1": {
+      "version": "latest",
+      "platform-tools": true,
+      "build-tools": "34.0.0",
+      "system-images": "android-34;google_apis"
+    }
+  }
+}
