@@ -1,4 +1,19 @@
 rootProject.name = 'myGreenBagScannerApp'
+
+// এই লাইনটি সাধারণত node_modules_dir সেট করে
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
+
+// --- নিচের লাইনগুলো react-native-camera এর জন্য যোগ করা হয়েছে ---
+// node_modules_dir সঠিকভাবে সংজ্ঞায়িত করুন
+def node_modules_dir = new File(settings.rootDir, '../node_modules')
+
+include ':react-native-camera'
+project(':react-native-camera').projectDir = new File(node_modules_dir, 'react-native-camera/android')
+
+// ML Kit ফ্লেভারের জন্য নির্দিষ্ট কনফিগারেশন
+include ':react-native-camera:mlkit'
+project(':react-native-camera:mlkit').projectDir = new File(node_modules_dir, 'react-native-camera/android/mlkit')
+// --- উপরের লাইনগুলো react-native-camera এর জন্য যোগ করা হয়েছে ---
