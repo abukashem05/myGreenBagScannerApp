@@ -13,7 +13,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.1") // Gradle plugin version (আপনার দেওয়া এরর থেকে 8.1.1 ছিল)
+        classpath("com.android.tools.build:gradle:8.1.1") // This matches your AGP version
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion") // Kotlin plugin
         classpath 'com.google.gms:google-services:4.4.2' // Firebase Google Services plugin
@@ -26,6 +26,6 @@ allprojects {
     repositories {
         mavenCentral()
         google()
-        maven { url 'https://www.jitpack.io' } // react-native-camera বা অন্যান্য কিছু লাইব্রেরির জন্য প্রয়োজন হতে পারে
+        maven { url 'https://www.jitpack.io' } // Necessary for react-native-camera and some other libraries
     }
 }

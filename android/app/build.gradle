@@ -4,25 +4,28 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
 react {
-    // এখানে কোনো পরিবর্তনের প্রয়োজন নেই যদি না আপনার বিশেষ কনফিগারেশন থাকে।
-    // ডিফল্ট মানগুলো সাধারণত React Native CLI দ্বারা সেট করা হয়।
+    // No changes needed here unless you have specific configurations.
+    // Default values are usually set by React Native CLI.
 }
 
-def enableProguardInReleaseBuilds = false // আপনি এটি আগে ডিফাইন করেছিলেন
-def jscFlavor = 'org.webkit:android-jsc:+' // আপনি এটি আগে ডিফাইন করেছিলেন
+def enableProguardInReleaseBuilds = false
+def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.mygreenbagscannerapp" // আপনার দেওয়া কোড থেকে
+    namespace "com.mygreenbagscannerapp"
     defaultConfig {
         applicationId "com.mygreenbagscannerapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        
+        // This line explicitly tells Gradle to use the 'mlkit' flavor for react-native-camera
+        missingDimensionStrategy 'react-native-camera', 'mlkit' 
     }
     signingConfigs {
         debug {
@@ -42,7 +45,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    // Java 11 বা তার উপরের জন্য এই কম্পাইলঅপশনগুলি যোগ করা উচিত
+    // Compile options for Java 11 or higher
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -63,17 +66,15 @@ dependencies {
     }
 
     // Firebase dependencies
-    // নিশ্চিত করুন যে আপনি এখানে Firebase BOM-এর সাম্প্রতিকতম স্থিতিশীল সংস্করণ ব্যবহার করছেন
-    // Google Firebase Documentation থেকে লেটেস্ট BOM ভার্সন চেক করতে পারেন:
-    // https://firebase.google.com/docs/android/setup#available-libraries
-    implementation platform('com.google.firebase:firebase-bom:33.0.0') // আপনার আগের কোড থেকে
+    // Ensure you are using a stable version of Firebase BOM here
+    implementation platform('com.google.firebase:firebase-bom:33.0.0') // Matches your package.json setup
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
 
-    // react-native-camera নির্ভরতা: mlkit ফ্লেভার নির্দিষ্ট করা হয়েছে
-    implementation project(':react-native-camera:mlkit') // এটি আগের এরর সমাধানের জন্য
+    // react-native-camera dependency: specifies the mlkit flavor
+    implementation project(':react-native-camera:mlkit') 
 }
 
-// এই লাইনগুলো সঠিক, কোনো পরিবর্তনের প্রয়োজন নেই
+// These lines are correct, no changes needed
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle" // যদি আপনি react-native-vector-icons ব্যবহার করেন
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle" // If you use react-native-vector-icons
