@@ -1,31 +1,32 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        buildToolsVersion = "34.0.0"
-        minSdkVersion = 21
-        compileSdkVersion = 34
-        targetSdkVersion = 34
-        ndkVersion = "25.1.8937393"
-        kotlinVersion = "1.8.0" // Ensure this is compatible, 1.8.0 is common
+        // আপনার বর্তমান ভার্সনগুলো এখানে থাকবে।
+        // VisionCamera-এর জন্য Kotlin ভার্সন 1.8.0 বা তার বেশি রাখা ভালো।
+        buildToolsVersion = "34.0.0" 
+        minSdkVersion = 21           
+        compileSdkVersion = 34       
+        targetSdkVersion = 34        
+        ndkVersion = "26.1.10909125" // <<<--- NDK 26 এ পরিবর্তন করা হয়েছে
+        kotlinVersion = "1.9.22"     // নিশ্চিত করুন যে এটি 1.8.0 বা তার বেশি
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.1") // This matches your AGP version
+        // নিশ্চিত করুন যে আপনার Android Gradle Plugin ভার্সন 7.3.1 বা তার বেশি।
+        classpath("com.android.tools.build:gradle:8.1.1") // আপনার Android Gradle Plugin ভার্সন
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("com.google.gms:google-services:4.4.1") // Firebase Google Services plugin
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion") // Kotlin plugin
-        classpath 'com.google.gms:google-services:4.4.2' // Firebase Google Services plugin
     }
 }
-
-apply plugin: "com.facebook.react.rootproject"
 
 allprojects {
     repositories {
         mavenCentral()
         google()
-        maven { url 'https://www.jitpack.io' } // Necessary for react-native-camera and some other libraries
+        maven { url 'https://www.jitpack.io' } // <<<--- এই লাইনটি নিশ্চিত করুন যে আছে।
     }
 }

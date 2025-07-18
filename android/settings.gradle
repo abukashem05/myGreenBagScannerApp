@@ -1,19 +1,22 @@
 rootProject.name = 'myGreenBagScannerApp'
 
-// This line typically sets the node_modules_dir
+// This line automatically includes and configures all native modules linked via React Native CLI.
+// It also sets up node_modules_dir correctly.
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 
 include ':app'
+
+// This line includes the React Native Gradle Plugin, required for React Native 0.73+.
+// (This is often found in the root build.gradle for older versions, but this placement is correct for newer ones)
 includeBuild('../node_modules/@react-native/gradle-plugin')
 
-// --- These lines are added for react-native-camera ---
-// Correctly define node_modules_dir
-def node_modules_dir = new File(settings.rootDir, '../node_modules')
+// For react-native-vision-camera and react-native-worklets-core,
+// if auto-linking works, you won't need explicit `include` lines here.
+// However, if they consistently fail to resolve, you might manually add them like this:
+// (Usually not needed if `applyNativeModulesSettingsGradle` works)
 
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(node_modules_dir, 'react-native-camera/android')
+// include ':react-native-vision-camera'
+// project(':react-native-vision-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vision-camera/android')
 
-// Specific configuration for ML Kit flavor
-include ':react-native-camera:mlkit'
-project(':react-native-camera:mlkit').projectDir = new File(node_modules_dir, 'react-native-camera/android/mlkit')
-// --- End of react-native-camera additions ---
+// include ':react-native-worklets-core'
+// project(':react-native-worklets-core').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-worklets-core/android')

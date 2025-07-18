@@ -3,16 +3,22 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+// IMPORTANT: This line explicitly sets the hermesEnabled flag for the :app project.
+// This resolves the "Could not get unknown property 'hermesEnabled'" error.
+project.ext.set("hermesEnabled", true) 
+
 react {
-    // No changes needed here unless you have specific configurations.
-    // Default values are usually set by React Native CLI.
+    // If you explicitly want to control Hermes enablement, you can do it here.
+    // However, the 'project.ext.set("hermesEnabled", true)' above should cover it.
+    // For React Native 0.70+, Hermes is usually enabled by default if not explicitly disabled.
+    // ensureHermesPending = project.hasProperty('hermesEnabled') && project.hermesEnabled.toBoolean()
 }
 
 def enableProguardInReleaseBuilds = false
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
-    ndkVersion rootProject.ext.ndkVersion
+    ndkVersion rootProject.ext.ndkVersion // <<<--- এটি root project থেকে NDK ভার্সন নিবে
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
@@ -23,9 +29,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        
-        // This line explicitly tells Gradle to use the 'mlkit' flavor for react-native-camera
-        missingDimensionStrategy 'react-native-camera', 'mlkit' 
     }
     signingConfigs {
         debug {
@@ -45,7 +48,6 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-    // Compile options for Java 11 or higher
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -56,25 +58,35 @@ android {
 }
 
 dependencies {
+    // React Native core dependencies
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
 
-    if (project.hasProperty('hermesEnabled') && project.hermesEnabled.toBoolean()) {
+    // Hermes or JSC setup
+    // This block now relies on the 'project.ext.hermesEnabled' property set above.
+    if (project.ext.hermesEnabled) { 
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
 
     // Firebase dependencies
-    // Ensure you are using a stable version of Firebase BOM here
-    implementation platform('com.google.firebase:firebase-bom:33.0.0') // Matches your package.json setup
+    implementation platform('com.google.firebase:firebase-bom:33.0.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
 
-    // react-native-camera dependency: specifies the mlkit flavor
-    implementation project(':react-native-camera:mlkit') 
+    // react-native-vision-camera dependency
+    implementation 'com.mrousavy:react-native-vision-camera'
+    // This line is essential for react-native-worklets-core to be linked
+    implementation project(':react-native-worklets-core')
+    
+    // react-native-vision-camera-code-scanner (Optional - uncomment if you are using it)
+    // If react-native-vision-camera-code-scanner is a direct npm package that exposes an Android library,
+    // you might need a line like this. However, often it's handled by autolinking.
+    // implementation 'com.example:react-native-vision-camera-code-scanner:X.X.X' 
 }
 
-// These lines are correct, no changes needed
+// These lines are correct for React Native autolinking and font handling
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle" // If you use react-native-vector-icons
+// If you use react-native-vector-icons and need fonts.gradle, keep the line below:
+// apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

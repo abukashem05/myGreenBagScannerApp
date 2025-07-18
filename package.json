@@ -14,8 +14,9 @@
     "@react-native-firebase/database": "^22.4.0",
     "react": "18.2.0",
     "react-native": "0.73.6",
-    "react-native-camera": "^4.2.1",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-vector-icons": "^10.2.0",
+    "react-native-vision-camera": "^4.7.0",
+    "react-native-worklets-core": "^1.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
